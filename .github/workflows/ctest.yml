@@ -25,6 +25,8 @@ jobs:
 
       - id: "haskell"
         uses: "haskell/actions/setup@v1"
-
+        with:
+          ghc-version: '8.10.7'
+          cabal-version: '3.4.1.0'
       - name: "build"
         run: cabal new-build

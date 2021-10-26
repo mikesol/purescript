@@ -1,0 +1,30 @@
+name: "cabal test"
+
+on: push
+
+defaults:
+  run:
+    shell: "bash"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false # do not cancel builds for other OSes if one fails
+      matrix:
+        # If upgrading Ubuntu, also upgrade it in the lint job below
+        os: [ "ubuntu-18.04", "macOS-10.15", "windows-2016" ]
+
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+      - uses: "actions/checkout@v2"
+
+      - uses: "actions/setup-node@v1"
+        with:
+          node-version: "10"
+
+      - id: "haskell"
+        uses: "haskell/actions/setup@v1"
+
+      - name: "build"
+        run: cabal new-build

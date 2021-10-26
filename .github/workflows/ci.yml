@@ -21,7 +21,7 @@ jobs:
       fail-fast: false # do not cancel builds for other OSes if one fails
       matrix:
         # If upgrading Ubuntu, also upgrade it in the lint job below
-        os: [ "ubuntu-18.04", "macOS-10.15", "windows-2016" ]
+        os: [ "ubuntu-16.04", "ubuntu-18.04", "macOS-10.15", "windows-2016" ]
 
     runs-on: "${{ matrix.os }}"
 
@@ -60,13 +60,15 @@ jobs:
       - name: "(Release only) Create bundle"
         if: "${{ env.CI_RELEASE == 'true' }}"
         run: |
-          os_name="${{ runner.os }}"
+          os_name="${{ matrix.os }}"
           case "$os_name" in
-            Linux)
+            ubuntu-18.04)
               bundle_os=linux64;;
-            macOS)
+            ubuntu-16.04)
+              bundle_os=oldlinux64;;
+            macOS-10.15)
               bundle_os=macos;;
-            Windows)
+            windows-2016)
               bundle_os=win64;;
             *)
               echo "Unknown OS name: $os_name"
